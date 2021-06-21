@@ -26,6 +26,88 @@ const addData = (url,collection) => {
 }
 
 
+const jobsDatabseURL = `mongodb+srv://${process.env.databaseUser}:${process.env.databasePassword}@hay-store-cluster-01.coi91.mongodb.net/${process.env.courseDatabase}?retryWrites=true&w=majority`
+const jobsClient = new MongoClient(jobsDatabseURL, { useNewUrlParser: true, useUnifiedTopology: true });
+
+jobsClient.connect((err) => {
+  const courseCollection = jobsClient.db(process.env.jobsDatabase).collection("dummy-jobs");
+  app.get('/jobs', (req, res) => {
+    courseCollection.find()
+      .toArray()
+      .then(items =>{
+        res.send(items);
+      })
+  })
+  
+  addData('addJobs' , courseCollection);
+  
+  app.delete('/deleteJob/:id' , (req,res) =>{
+    courseCollection.deleteOne({_id: ObjectID(req.params.id)})
+    .then(result=>{
+      console.log('removed successully');
+    })
+    .catch(e=>[
+      console.log('could not be removed')
+    ])
+  })
+
+})
+
+
+const users = `mongodb+srv://${process.env.databaseUser}:${process.env.databasePassword}@hay-store-cluster-01.coi91.mongodb.net/${process.env.courseDatabase}?retryWrites=true&w=majority`
+const usersClient = new MongoClient(users, { useNewUrlParser: true, useUnifiedTopology: true });
+
+usersClient.connect((err) => {
+  const courseCollection = usersClient.db(process.env.usersDatabase).collection("users");
+  app.get('/users', (req, res) => {
+    courseCollection.find()
+      .toArray()
+      .then(items =>{
+        res.send(items);
+      })
+  })
+  
+  addData('addJobs' , courseCollection);
+  
+  app.delete('/deleteUser/:id' , (req,res) =>{
+    courseCollection.deleteOne({_id: ObjectID(req.params.id)})
+    .then(result=>{
+      console.log('removed successully');
+    })
+    .catch(e=>[
+      console.log('could not be removed')
+    ])
+  })
+
+})
+
+const mainJobsDatabseURL = `mongodb+srv://${process.env.databaseUser}:${process.env.databasePassword}@hay-store-cluster-01.coi91.mongodb.net/${process.env.courseDatabase}?retryWrites=true&w=majority`
+const mainJobsClient = new MongoClient(mainJobsDatabseURL, { useNewUrlParser: true, useUnifiedTopology: true });
+
+mainJobsClient.connect((err) => {
+  const courseCollection = mainJobsClient.db(process.env.mainJobsDatabase).collection("main-jobs");
+  app.get('/main-jobs', (req, res) => {
+    courseCollection.find()
+      .toArray()
+      .then(items =>{
+        res.send(items);
+      })
+  })
+  
+  addData('addMainJobs' , courseCollection);
+  
+  app.delete('/deleteMainJob/:id' , (req,res) =>{
+    courseCollection.deleteOne({_id: ObjectID(req.params.id)})
+    .then(result=>{
+      console.log('removed successully');
+    })
+    .catch(e=>[
+      console.log('could not be removed')
+    ])
+  })
+
+})
+
 const userDatabaseURI = `mongodb+srv://${process.env.databaseUser}:${process.env.databasePassword}@hay-store-cluster-01.coi91.mongodb.net/${process.env.userDatabase}?retryWrites=true&w=majority`
 const userClient = new MongoClient(userDatabaseURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
